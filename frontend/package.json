@@ -3,30 +3,31 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-      "start": "webpack serve --mode development --hot --port 3000",
-      "build": "webpack --mode production",
-      "serve": "serve build",
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "webpack serve --mode development --hot --port 3000",
+        "build": "webpack --mode production",
+        "serve": "serve build",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-      "react": "latest",
-      "react-dom": "latest",
-      "tailwindcss": "latest"
+        "react": "latest",
+        "react-dom": "latest",
+        "tailwindcss": "latest"
     },
     "devDependencies": {
-      "@babel/core": "latest",
-      "@babel/preset-env": "latest",
-      "@babel/preset-react": "latest",
-      "autoprefixer": "latest",
-      "babel-loader": "latest",
-      "css-loader": "latest",
-      "html-webpack-plugin": "latest",
-      "postcss": "latest",
-      "postcss-loader": "latest",
-      "style-loader": "latest",
-      "webpack": "latest",
-      "webpack-cli": "latest",
-      "webpack-dev-server": "latest",
-      "serve": "latest"
+        "@babel/core": "latest",
+        "@babel/preset-env": "latest",
+        "@babel/preset-react": "latest",
+        "@tailwindcss/postcss": "latest",
+        "autoprefixer": "latest",
+        "babel-loader": "latest",
+        "css-loader": "latest",
+        "html-webpack-plugin": "latest",
+        "postcss": "latest",
+        "postcss-loader": "latest",
+        "serve": "latest",
+        "style-loader": "latest",
+        "webpack": "latest",
+        "webpack-cli": "latest",
+        "webpack-dev-server": "latest"
     }
-  }
+}

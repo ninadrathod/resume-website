@@ -5,12 +5,16 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3001;
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/resume_database'; // Default for local development
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/resume_database'; // Default for local development
 
 app.use(cors());
 app.use(express.json());
 
 let db;
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 async function connectMongo() {
   try {

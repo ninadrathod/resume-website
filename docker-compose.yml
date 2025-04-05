@@ -1,51 +1,64 @@
 version: '3.8'
+
 services:
+  # MongoDB Service
   mongodb:
-    build: ./mongodb
-    ports:
-      - "27017:27017"
+    image: mongo:latest
+    container_name: mongodb
     networks:
-      - resume_network
+      - my-app-network
     volumes:
-      - mongodb_data:/data/db
+      - mongodb_data:/data/db # Use a volume for data persistence
+    ports:
+      - 27017:27017 # Expose port for external access if needed (optional in Docker network)
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=qwerty
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017 --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Node.js Backend Service
   backend:
-    build: ./backend
+    build:
+      context: ./backend # Path to your Node.js backend Dockerfile
+      dockerfile: Dockerfile
+    container_name: backend
+    networks:
+      - my-app-network
     ports:
-      - "3001:3001"
-    environment:
-      - PORT=3001
-      - MONGO_URI=mongodb://admin:qwerty@mongodb:27017/resume_database?authSource=admin
+      - 3001:3001 # Expose the backend port
     depends_on:
       - mongodb
-    networks:
-      - resume_network
-    volumes:
-      - ./backend:/app
-      - backend_node_modules:/app/node_modules
+    environment:
+      - PORT=3001
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017 # Use service name as hostname
+    healthcheck:
+      test: wget -qO- http://localhost:3001/health | grep -q 'OK' # Define a health check endpoint in your backend
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
 
+  # React Frontend Service
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend # Path to your React frontend Dockerfile
+      dockerfile: Dockerfile
+    container_name: frontend
+    networks:
+      - my-app-network
     ports:
-      - "3000:80"
+      - 80:80 # Expose the frontend port
     depends_on:
       - backend
-    networks:
-      - resume_network
-    volumes:
-      - ./frontend:/app
-      - frontend_node_modules:/app/node_modules
-    environment:
-      - REACT_APP_BACKEND_URL=http://localhost:3001/api # For local development
+    restart: always
 
 networks:
-  resume_network:
+  my-app-network:
     driver: bridge
 
 volumes:
-  mongodb_data:
-  backend_node_modules:
-  frontend_node_modules:
+  mongodb_data: # Named volume for MongoDB data

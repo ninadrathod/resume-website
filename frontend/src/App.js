@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   const [resumeData, setResumeData] = useState([]);
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001'; // Fallback for local
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/resume-data') // Adjust port if needed
+    fetch('${backendUrl}/api/resume-data') // Adjust port if needed
       .then(response => response.json())
       .then(data => setResumeData(data))
       .catch(error => console.error('Error fetching data:', error));
