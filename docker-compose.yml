@@ -13,7 +13,7 @@ services:
       - 27017:27017 # Expose port for external access if needed (optional in Docker network)
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_ROOT_PASSWORD=qwerty
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017 --quiet
       interval: 10s
@@ -34,7 +34,7 @@ services:
       - mongodb
     environment:
       - PORT=3001
-      - MONGODB_URI=mongodb://admin:password@mongodb:27017 # Use service name as hostname
+      - MONGODB_URI=mongodb://admin:qwerty@mongodb:27017 # Use service name as hostname
     healthcheck:
       test: wget -qO- http://localhost:3001/health | grep -q 'OK' # Define a health check endpoint in your backend
       interval: 10s
