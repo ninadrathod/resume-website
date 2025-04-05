@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  mongodb:
+    build: ./mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - resume_network
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=qwerty
+
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - MONGO_URI=mongodb://admin:qwerty@mongodb:27017/resume_database?authSource=admin
+    depends_on:
+      - mongodb
+    networks:
+      - resume_network
+    volumes:
+      - ./backend:/app
+      - backend_node_modules:/app/node_modules
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - resume_network
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:3001/api # For local development
+
+networks:
+  resume_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  backend_node_modules:
+  frontend_node_modules:
